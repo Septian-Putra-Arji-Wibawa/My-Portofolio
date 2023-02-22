@@ -21,15 +21,21 @@ exports.addPengalaman = async (req, res) => {
 
 exports.getPengalamans = async (req, res) => {
     try{
-        const data = await pengalaman.findAll({
+        let riwayat = await pengalaman.findAll({
             attributes: {
                 exclude: ['createdAt','updatedAt']
             }
         });
         
+        const PATH = 'http://localhost:5000/uploads/'
+
+        riwayat = riwayat.map((riwayats) => {
+            riwayats.image = PATH + riwayats.image
+            return riwayats;
+        });
+
         res.send({
-            status : 'Success',
-            data,
+            riwayat
         })
         } catch (error){
             console.log(error)
@@ -88,7 +94,7 @@ try{
             message:'cant find any experience'
         });
     }
-};
+    };
 
 exports.updatePengalaman = async (req, res) => {
     try{
@@ -112,7 +118,7 @@ exports.updatePengalaman = async (req, res) => {
         }
     };
 
-    exports.deletePengalaman = async (req, res) => {
+exports.deletePengalaman = async (req, res) => {
         try{
             const id = req.params.id;
             await pengalaman.destroy({
@@ -132,4 +138,4 @@ exports.updatePengalaman = async (req, res) => {
                     message:'cant find any experience'
                 });
             }
-        };
+    };
